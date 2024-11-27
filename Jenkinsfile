@@ -27,6 +27,12 @@ stage('compile'){
             sh "docker build -t ajeetchavhan/puneethrajkumar:1 ."
          }
       }
+
+      stage('Docker image scan'){
+           steps{
+                sh "trivy image --format table -o trivy-image-report.html ajeetchavhan/puneethrajkumar:1"
+           }     
+      }
       stage('Containerisation'){
         steps{
             sh '''
