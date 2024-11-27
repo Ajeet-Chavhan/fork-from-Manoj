@@ -8,7 +8,7 @@ pipeline{
  stages{
         stage('git checkout'){
            steps{
-               git branch: 'main', url: 'https://github.com/ManojKRISHNAPPA/test-1.git'
+               git branch: 'main', url: 'https://github.com/Ajeet-Chavhan/fork-from-Manoj.git'
            }
 
          }
@@ -21,6 +21,19 @@ stage('compile'){
           steps{
               sh "mvn clean install" 
           }
+      }
+      stage('Docker Build and tag'){
+         steps{
+            sh "docker build -t fork-from-Manoj/cd:1"
+         }
+      }
+      stage('Containerisation'){
+        steps{
+            sh '''
+             docker run -it -d --name c1 -p 9000:8080 fork-from-Manoj/cd:1
+
+            '''
+        }
       }
 
 }
