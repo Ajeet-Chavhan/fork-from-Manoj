@@ -24,20 +24,39 @@ stage('compile'){
       }
       stage('Docker Build and tag'){
          steps{
-            sh "docker build -t fork-from-Manoj/cd:1"
+            sh "docker build -t ajeetchavhan/puneethrajkumar:1 ."
          }
       }
       stage('Containerisation'){
         steps{
             sh '''
-             docker run -it -d --name c1 -p 9000:8080 fork-from-Manoj/cd:1
+             docker stop c1
+            docker rm c1
+             docker run -it -d --name c1 -p 9000:8080 ajeetchavhan/puneethrajkumar:1
 
             '''
         }
       }
+      stage('Login to Docker Hub') {
+                    steps {                        
+                        script {
+                           withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                               sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                          }
+                     }
+                     }
 
 }
+
+ stage('Pushing image to repository'){
+            steps{
+               sh 'docker push ajeetchavhan/puneethrajkumar:1'
+            }
+        }
 }
+}
+      
+
 
 
 // pipeline {
