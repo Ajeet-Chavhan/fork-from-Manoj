@@ -43,16 +43,12 @@ stage('compile'){
             '''
         }
       }
-      stage('Login to Docker Hub') {
-                    steps {                        
-                        script {
-                           withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                               sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                          }
-                     }
-                     }
-
-}
+     stage('Login to Docker Hub') {      	
+    steps{                       	
+	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'                		
+	echo 'Login Completed'      
+    }           
+}   
 
  stage('Pushing image to repository'){
             steps{
